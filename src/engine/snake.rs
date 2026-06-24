@@ -1,10 +1,7 @@
 use macroquad::{color::RED, shapes::draw_rectangle, window::screen_width};
 
-const STEP: f32 = 1.0;
-
 pub struct Snake {
-    head_x: f32,
-    head_y: f32,
+    body: Vec<(f32, f32)>,
 
     dx: f32,
     dy: f32,
@@ -12,55 +9,68 @@ pub struct Snake {
 
 impl Snake {
     pub fn new() -> Self {
+        let block_size = Self::get_block_size();
         Self {
-            head_x: 10.0,
-            head_y: 10.0,
-            dx: STEP,
+            body: vec![
+                (0.0, block_size),
+                (block_size * 1.0, block_size),
+                (block_size * 2.0, block_size),
+            ],
+
+            dx: block_size,
             dy: 0.0,
         }
     }
 
-    fn get_block_size() -> f32 {
-        screen_width() * 0.125 / 100.0
+    pub fn get_block_size() -> f32 {
+        screen_width() * 2.5 / 100.0
     }
 
     pub fn render_snake(&self) {
         let block_size = Self::get_block_size();
-        draw_rectangle(
-            self.head_x,
-            self.head_y,
-            20.0 * block_size,
-            20.0 * block_size,
-            RED,
-        );
+
+        for block in &self.body {
+            draw_rectangle(block.0, block.1, block_size, block_size, RED);
+        }
     }
 
     pub fn get_head_pos(&self) -> (f32, f32) {
-        (self.head_x, self.head_y)
+        let head_index = self.body.len() - 1;
+
+        (self.body[head_index].0, self.body[head_index].1)
     }
 
     pub fn move_snake(&mut self) {
-        self.head_x += self.dx;
-        self.head_y += self.dy;
+        let head_index = self.body.len() - 1;
+        // Move the rest of the body first
+        for i in 0..self.body.len() {
+            if i < self.body.len() - 1 {
+                self.body[i] = self.body[i + 1];
+            }
+        }
+
+        // Move the head
+        self.body[head_index].0 += self.dx;
+        self.body[head_index].1 += self.dy;
     }
 
     pub fn move_up(&mut self) {
         self.dx = 0.0;
-        self.dy = -STEP;
+        self.dy = -Self::get_block_size();
     }
 
     pub fn move_down(&mut self) {
         self.dx = 0.0;
-        self.dy = STEP;
+        self.dy = Self::get_block_size();
     }
 
     pub fn move_right(&mut self) {
-        self.dx = STEP;
+        self.dx = Self::get_block_size();
         self.dy = 0.0;
     }
 
     pub fn move_left(&mut self) {
-        self.dx = -STEP;
+        self.dx = -Self::get_block_size();
         self.dy = 0.0;
     }
 }

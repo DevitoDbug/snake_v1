@@ -20,20 +20,31 @@ impl Game {
 
     pub async fn start(&mut self) {
         let mut snake = Snake::new();
+        let mut last_ran_time = 0.0;
+
         loop {
             clear_background(WHITE);
 
+            Self::render_vert_lines(&self);
+
             match self.game_state {
-                GameState::Playing => Self::render_game(&self, &mut snake),
+                GameState::Playing => {
+                    if get_time() - last_ran_time > 0.15 {
+                        Self::render_game(&self, &mut snake, true);
+                        last_ran_time = get_time();
+                    } else {
+                        Self::render_game(&self, &mut snake, false);
+                    }
+                }
                 GameState::GameOver => Self::render_end_game(&self),
             }
 
             // TODO:: Do better game end
             let head = snake.get_head_pos();
-            if head.0 < 0.0 || head.0 > screen_width() {
+            if head.0 <= 0.0 || head.0 >= screen_width() {
                 self.game_state = GameState::GameOver
             }
-            if head.1 < 0.0 || head.1 > screen_height() {
+            if head.1 <= 0.0 || head.1 >= screen_height() {
                 self.game_state = GameState::GameOver
             }
 
@@ -41,9 +52,11 @@ impl Game {
         }
     }
 
-    fn render_game(&self, snake: &mut Snake) {
+    fn render_game(&self, snake: &mut Snake, move_snake: bool) {
         snake.render_snake();
-        snake.move_snake();
+        if move_snake {
+            snake.move_snake();
+        }
         if is_key_pressed(KeyCode::Up) {
             snake.move_up();
         }
@@ -63,5 +76,19 @@ impl Game {
         let y = screen_height() * 25.0 / 100.0;
 
         draw_text("Game over ", x, y, screen_width() * 15.0 / 100.0, RED);
+    }
+
+    fn render_vert_lines(&self) {
+        let mut start = 0.0;
+        while start < screen_width() {
+            draw_line(start, 0.0, start, screen_height(), 1.0, GREEN);
+            start += Snake::get_block_size();
+        }
+
+        let mut start = 0.0;
+        while start < screen_height() {
+            draw_line(0.0, start, screen_width(), start, 1.0, GREEN);
+            start += Snake::get_block_size();
+        }
     }
 }
