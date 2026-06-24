@@ -23,7 +23,7 @@ impl Snake {
     }
 
     pub fn get_block_size() -> f32 {
-        screen_width() * 2.5 / 100.0
+        screen_width() * 1.5 / 100.0
     }
 
     pub fn render_snake(&self) {
