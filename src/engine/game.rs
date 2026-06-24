@@ -59,11 +59,9 @@ impl Game {
     }
 
     fn render_end_game(&self) {
-        let x = screen_width() * 90.0 / 100.0;
-        let y = screen_height() / 2.0;
-        let p = 10.0;
+        let x = screen_width() * 25.0 / 100.0;
+        let y = screen_height() * 25.0 / 100.0;
 
-        draw_rectangle(x, y, 100.0, 100.0, GREEN);
-        draw_text("Game over ", x + p, y + p, 20.0, RED);
+        draw_text("Game over ", x, y, screen_width() * 15.0 / 100.0, RED);
     }
 }
