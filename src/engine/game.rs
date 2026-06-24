@@ -29,6 +29,8 @@ impl Game {
                 snake.move_left();
             }
 
+            // Check for game over
+
             next_frame().await
         }
     }
