@@ -35,6 +35,10 @@ impl Snake {
         );
     }
 
+    pub fn get_head_pos(&self) -> (f32, f32) {
+        (self.head_x, self.head_y)
+    }
+
     pub fn move_snake(&mut self) {
         self.head_x += self.dx;
         self.head_y += self.dy;

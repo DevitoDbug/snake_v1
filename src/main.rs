@@ -4,6 +4,6 @@ mod engine;
 
 #[macroquad::main("SnakeGame")]
 async fn main() {
-    let game = Game::new();
+    let mut game = Game::new();
     game.start().await;
 }
