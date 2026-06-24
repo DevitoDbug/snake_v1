@@ -6,8 +6,6 @@ mod game;
 #[macroquad::main("SnakeGame")]
 async fn main() {
     let mut snake = Snake::new();
-
-    println!("Hello game!");
     loop {
         clear_background(WHITE);
 

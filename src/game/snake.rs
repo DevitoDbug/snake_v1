@@ -1,4 +1,4 @@
-use macroquad::{color::RED, shapes::draw_rectangle};
+use macroquad::{color::RED, shapes::draw_rectangle, window::screen_width};
 
 const STEP: f32 = 1.0;
 
@@ -20,8 +20,13 @@ impl Snake {
         }
     }
 
+    fn get_block_size() -> f32 {
+        screen_width() * 0.125 / 100.0
+    }
+
     pub fn render_snake(&self) {
-        draw_rectangle(self.x, self.y, 20.0, 20.0, RED);
+        let block_size = Self::get_block_size();
+        draw_rectangle(self.x, self.y, 20.0 * block_size, 20.0 * block_size, RED);
     }
 
     pub fn move_snake(&mut self) {
