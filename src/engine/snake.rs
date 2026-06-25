@@ -84,21 +84,34 @@ impl Snake {
     }
 
     pub fn move_up(&mut self) {
+        if self.dy != 0.0 {
+            return;
+        }
+
         self.dx = 0.0;
         self.dy = -helpers::get_block_size();
     }
 
     pub fn move_down(&mut self) {
+        if self.dy != 0.0 {
+            return;
+        }
         self.dx = 0.0;
         self.dy = helpers::get_block_size();
     }
 
     pub fn move_right(&mut self) {
+        if self.dx != 0.0 {
+            return;
+        }
         self.dx = helpers::get_block_size();
         self.dy = 0.0;
     }
 
     pub fn move_left(&mut self) {
+        if self.dx != 0.0 {
+            return;
+        }
         self.dx = -helpers::get_block_size();
         self.dy = 0.0;
     }
