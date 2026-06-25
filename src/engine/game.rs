@@ -1,6 +1,6 @@
 use macroquad::prelude::*;
 
-use crate::engine::{helpers, snake::Snake};
+use crate::engine::{apple::Apple, helpers, snake::Snake};
 
 enum GameState {
     Playing,
@@ -22,6 +22,7 @@ impl Game {
 
     pub async fn start(&mut self) {
         let mut snake = Snake::new();
+        let mut apple = Apple::new();
         let mut last_ran_time = 0.0;
 
         loop {
@@ -32,17 +33,16 @@ impl Game {
             match self.game_state {
                 GameState::Playing => {
                     if get_time() - last_ran_time > 0.15 {
-                        Self::render_game(&self, &mut snake, true);
+                        Self::render_game(&self, &mut snake, &mut apple, true);
                         last_ran_time = get_time();
                     } else {
-                        Self::render_game(&self, &mut snake, false);
+                        Self::render_game(&self, &mut snake, &mut apple, false);
                     }
                 }
 
                 GameState::GameOver => Self::render_end_game(&self),
             }
 
-            // TODO:: Do better game end
             let head = snake.get_head_pos();
             if head.0 <= 0.0 || head.0 >= screen_width() {
                 self.game_state = GameState::GameOver
@@ -55,8 +55,10 @@ impl Game {
         }
     }
 
-    fn render_game(&self, snake: &mut Snake, move_snake: bool) {
+    fn render_game(&self, snake: &mut Snake, apple: &Apple, move_snake: bool) {
         snake.render_snake();
+        apple.render_apple();
+
         if move_snake {
             snake.move_snake();
         }
