@@ -28,8 +28,6 @@ impl Game {
         loop {
             clear_background(WHITE);
 
-            Self::render_vert_lines(&self);
-
             match self.game_state {
                 GameState::Playing => {
                     if get_time() - last_ran_time > 0.15 {
@@ -112,7 +110,7 @@ impl Game {
         draw_text("Game over ", x, y, screen_width() * 15.0 / 100.0, RED);
     }
 
-    fn render_vert_lines(&self) {
+    fn _render_vert_lines(&self) {
         let mut start = 0.0;
         while start < screen_width() {
             draw_line(start, 0.0, start, screen_height(), 1.0, GREEN);
