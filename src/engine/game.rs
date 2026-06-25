@@ -24,13 +24,14 @@ impl Game {
         let mut snake = Snake::new();
         let mut apple = Apple::new();
         let mut last_ran_time = 0.0;
+        let mut per_frame_timer = 0.15;
 
         loop {
             clear_background(WHITE);
 
             match self.game_state {
                 GameState::Playing => {
-                    if get_time() - last_ran_time > 0.15 {
+                    if get_time() - last_ran_time > per_frame_timer {
                         Self::render_game(&self, &mut snake, &mut apple, true);
                         last_ran_time = get_time();
                     } else {
@@ -76,6 +77,7 @@ impl Game {
                 apple.reset_position();
                 snake.grow_snake();
                 self.points += 1;
+                per_frame_timer -= 0.001;
             }
 
             next_frame().await
