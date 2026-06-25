@@ -44,10 +44,10 @@ impl Game {
             }
 
             let head = snake.get_head_pos();
-            if head.0 <= 0.0 || head.0 >= screen_width() {
+            if head.0 < 0.0 || head.0 >= screen_width() {
                 self.game_state = GameState::GameOver
             }
-            if head.1 <= 0.0 || head.1 >= screen_height() {
+            if head.1 < 0.0 || head.1 >= screen_height() {
                 self.game_state = GameState::GameOver
             }
 
