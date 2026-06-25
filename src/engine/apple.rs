@@ -25,6 +25,10 @@ impl Apple {
         self.y = get_block_size() * random_y as f32;
     }
 
+    pub fn get_apple_position(&self) -> (f32, f32) {
+        (self.x, self.y)
+    }
+
     pub fn render_apple(&self) {
         draw_rectangle(
             self.x,

@@ -1,6 +1,6 @@
 use macroquad::prelude::*;
 
-use crate::engine::{apple::Apple, helpers, snake::Snake};
+use crate::engine::{apple::Apple, collisions, helpers, snake::Snake};
 
 enum GameState {
     Playing,
@@ -9,14 +9,14 @@ enum GameState {
 
 pub struct Game {
     game_state: GameState,
-    _points: i32,
+    points: i32,
 }
 
 impl Game {
     pub fn new() -> Self {
         Self {
             game_state: GameState::Playing,
-            _points: 0,
+            points: 0,
         }
     }
 
@@ -43,12 +43,35 @@ impl Game {
                 GameState::GameOver => Self::render_end_game(&self),
             }
 
-            let head = snake.get_head_pos();
-            if head.0 < 0.0 || head.0 >= screen_width() {
+            // Wall collision check
+            let head_pos = snake.get_head_pos();
+            if head_pos.0 < 0.0 || head_pos.0 >= screen_width() {
                 self.game_state = GameState::GameOver
             }
-            if head.1 < 0.0 || head.1 >= screen_height() {
+            if head_pos.1 < 0.0 || head_pos.1 >= screen_height() {
                 self.game_state = GameState::GameOver
+            }
+
+            // Apple collision check
+            let apple_pos = apple.get_apple_position();
+            let is_collision = collisions::_rect_vs_rect_collided(
+                collisions::Rect {
+                    x: head_pos.0,
+                    y: head_pos.1,
+                    height: helpers::get_block_size(),
+                    width: helpers::get_block_size(),
+                },
+                collisions::Rect {
+                    x: apple_pos.0,
+                    y: apple_pos.1,
+                    height: helpers::get_block_size(),
+                    width: helpers::get_block_size(),
+                },
+            );
+
+            if is_collision {
+                apple.reset_position();
+                self.points += 1;
             }
 
             next_frame().await
