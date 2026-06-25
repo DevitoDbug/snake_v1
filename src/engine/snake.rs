@@ -4,6 +4,7 @@ use crate::engine::{collisions, helpers};
 
 pub struct Snake {
     body: Vec<(f32, f32)>,
+    grow: bool,
 
     dx: f32,
     dy: f32,
@@ -18,6 +19,7 @@ impl Snake {
                 (block_size * 1.0, block_size),
                 (block_size * 2.0, block_size),
             ],
+            grow: false,
 
             dx: block_size,
             dy: 0.0,
@@ -50,6 +52,16 @@ impl Snake {
         // Move the head
         self.body[head_index].0 += self.dx;
         self.body[head_index].1 += self.dy;
+
+        if self.grow {
+            let new_head_x = self.body[head_index].0 + self.dx;
+            let new_head_y = self.body[head_index].1 + self.dy;
+            self.body.push((new_head_x, new_head_y));
+        }
+    }
+
+    pub fn grow_snake(&mut self) {
+        self.grow = true;
     }
 
     pub fn collided_with_body(&self) -> bool {

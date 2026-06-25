@@ -76,6 +76,7 @@ impl Game {
 
             if is_collision {
                 apple.reset_position();
+                snake.grow_snake();
                 self.points += 1;
             }
 
