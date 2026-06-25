@@ -1,6 +1,6 @@
 use macroquad::prelude::*;
 
-use crate::engine::snake::Snake;
+use crate::engine::{helpers, snake::Snake};
 
 enum GameState {
     Playing,
@@ -9,12 +9,14 @@ enum GameState {
 
 pub struct Game {
     game_state: GameState,
+    _points: i32,
 }
 
 impl Game {
     pub fn new() -> Self {
         Self {
             game_state: GameState::Playing,
+            _points: 0,
         }
     }
 
@@ -36,6 +38,7 @@ impl Game {
                         Self::render_game(&self, &mut snake, false);
                     }
                 }
+
                 GameState::GameOver => Self::render_end_game(&self),
             }
 
@@ -82,13 +85,13 @@ impl Game {
         let mut start = 0.0;
         while start < screen_width() {
             draw_line(start, 0.0, start, screen_height(), 1.0, GREEN);
-            start += Snake::get_block_size();
+            start += helpers::get_block_size();
         }
 
         let mut start = 0.0;
         while start < screen_height() {
             draw_line(0.0, start, screen_width(), start, 1.0, GREEN);
-            start += Snake::get_block_size();
+            start += helpers::get_block_size();
         }
     }
 }
