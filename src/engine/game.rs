@@ -43,6 +43,11 @@ impl Game {
                 GameState::GameOver => Self::render_end_game(&self),
             }
 
+            // Body collision check
+            if snake.collided_with_body() {
+                self.game_state = GameState::GameOver
+            }
+
             // Wall collision check
             let head_pos = snake.get_head_pos();
             if head_pos.0 < 0.0 || head_pos.0 >= screen_width() {
@@ -54,7 +59,7 @@ impl Game {
 
             // Apple collision check
             let apple_pos = apple.get_apple_position();
-            let is_collision = collisions::_rect_vs_rect_collided(
+            let is_collision = collisions::rect_vs_rect_collided(
                 collisions::Rect {
                     x: head_pos.0,
                     y: head_pos.1,

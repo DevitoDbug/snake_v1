@@ -5,7 +5,7 @@ pub struct Rect {
     pub height: f32,
 }
 
-pub fn _rect_vs_rect_collided(rect1: Rect, rect2: Rect) -> bool {
+pub fn rect_vs_rect_collided(rect1: Rect, rect2: Rect) -> bool {
     if rect1.y == rect2.y {
         let left_bound = rect1.x;
         let right_bound = rect1.x + rect1.width;

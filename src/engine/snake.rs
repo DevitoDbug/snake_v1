@@ -1,6 +1,6 @@
 use macroquad::{color::RED, shapes::draw_rectangle};
 
-use crate::engine::helpers;
+use crate::engine::{collisions, helpers};
 
 pub struct Snake {
     body: Vec<(f32, f32)>,
@@ -50,6 +50,37 @@ impl Snake {
         // Move the head
         self.body[head_index].0 += self.dx;
         self.body[head_index].1 += self.dy;
+    }
+
+    pub fn collided_with_body(&self) -> bool {
+        let head = self.get_head_pos();
+        let block_size = helpers::get_block_size();
+
+        for (i, body_part) in self.body.iter().enumerate() {
+            if i == self.body.len() - 1 {
+                continue;
+            }
+            let body_head_collided = collisions::rect_vs_rect_collided(
+                collisions::Rect {
+                    x: head.0,
+                    y: head.1,
+                    width: block_size,
+                    height: block_size,
+                },
+                collisions::Rect {
+                    x: body_part.0,
+                    y: body_part.1,
+                    width: block_size,
+                    height: block_size,
+                },
+            );
+
+            if body_head_collided {
+                return true;
+            }
+        }
+
+        false
     }
 
     pub fn move_up(&mut self) {
