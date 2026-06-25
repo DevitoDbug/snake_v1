@@ -57,6 +57,7 @@ impl Snake {
             let new_head_x = self.body[head_index].0 + self.dx;
             let new_head_y = self.body[head_index].1 + self.dy;
             self.body.push((new_head_x, new_head_y));
+            self.grow = false;
         }
     }
 
