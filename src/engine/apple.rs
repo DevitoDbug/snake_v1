@@ -1,6 +1,6 @@
-use macroquad::{prelude::*, rand::gen_range};
+use macroquad::prelude::*;
 
-use crate::engine::helpers;
+use crate::engine::helpers::{self, get_block_size};
 
 pub struct Apple {
     x: f32,
@@ -9,15 +9,20 @@ pub struct Apple {
 
 impl Apple {
     pub fn new() -> Self {
-        Self {
-            x: gen_range(0.0, screen_width()),
-            y: gen_range(0.0, screen_height()),
-        }
+        let mut apple = Self { x: 0.0, y: 0.0 };
+        apple.reset_position();
+
+        return apple;
     }
 
     pub fn reset_position(&mut self) {
-        self.x = gen_range(0.0, screen_width());
-        self.y = gen_range(0.0, screen_height());
+        let max_x_blocks = (screen_width() / get_block_size()) as i32;
+        let random_x = rand::gen_range(0, max_x_blocks);
+        let max_y_blocks = (screen_height() / get_block_size()) as i32;
+        let random_y = rand::gen_range(0, max_y_blocks);
+
+        self.x = get_block_size() * random_x as f32;
+        self.y = get_block_size() * random_y as f32;
     }
 
     pub fn render_apple(&self) {
